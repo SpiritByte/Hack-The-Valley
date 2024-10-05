@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import requests
 
-r = requests.get('https://f9c0-138-51-73-220.ngrok-free.app/api/getrecords').json()
+r = requests.get('https://htv-project.onrender.com/api/getrecords').json()
 
 def local_css(file_name):
     with open(file_name) as f:
