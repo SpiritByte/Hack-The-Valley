@@ -3,7 +3,7 @@ import requests
 import json
 
 # Set your OpenAI API key
-api_key = "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"
+api_key = ""
 api_url = "https://api.openai.com/v1/chat/completions"
 headers = {
     "Authorization": f"Bearer {api_key}",
