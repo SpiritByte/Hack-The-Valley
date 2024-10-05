@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+import requests
+
+r = requests.get('https://f9c0-138-51-73-220.ngrok-free.app/api/getrecords').json()
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -14,48 +17,59 @@ def icon(icon_name):
 local_css("style.css")
 remote_css('https://fonts.googleapis.com/icon?family=Material+Icons')
 
-image_data = [
-    {
-        "url": "Alex_Code.jpg",
-        "short_description": "This is a description for the first image.",
-        "full_description": "This is a description for the first image. This is a description for the first image. This is a description for the first image.",
-        "timestamp": "2024-10-01 14:30:00",
-        "location": {"latitude": 37.7749, "longitude": -122.4194} 
-    },
-    {
-        "url": "Baron_Yuhh.jpg",
-        "short_description": "This is a description for the second image.",
-        "full_description": "This is a description for the second image. This is a description for the second image. This is a description for the second image.",
-        "timestamp": "2024-10-02 09:15:00",
-        "location": {"latitude": 34.0522, "longitude": -118.2437} 
-    },
-    {
-        "url": "Anirudh_Mad.jpg",
-        "short_description": "This is a description for the third image.",
-        "full_description": "This is a description for the third image. This is a description for the third image. This is a description for the third image. This is a description for the third image.",
-        "timestamp": "2024-10-03 18:45:00",
-        "location": {"latitude": 40.7128, "longitude": -74.0060} 
-    },
-    {
-        "url": "Anirudh_Bye.jpg",
-        "short_description": "This is a description for the fourth image.",
-        "full_description": "This is a description for the fourth image. This is a description for the fourth image.",
-        "timestamp": "2024-10-04 13:10:00",
-        "location": {"latitude": 51.5074, "longitude": -0.1278} 
-    }
-]
+image_data = [{"url": x["file_url"], "short_description": x["caption"], "full_description": x["descp"], "timestamp": x["timestamp"], "location": {"latitude": float(x["locationx"]), "longitude": float(x["locationy"])}} for x in r]
 
 if "selected_image_index" not in st.session_state:
     st.session_state.selected_image_index = None
 
 def show_details(index):
     st.session_state.selected_image_index = index
+    st.rerun()
 
 def go_back():
     st.session_state.selected_image_index = None
+    st.rerun()
 
-selected = st.text_input("Search For Memories", "")
-button_clicked = st.button("OK")
+st.markdown(
+    """
+    <style>
+    .custom-button {
+        margin-bottom: 1.7rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+if st.session_state.selected_image_index is None:
+    col1, col2 = st.columns([3, 0.3])
+
+    with col1:
+        selected = st.text_input("Search For Memories", "")
+
+    with col2:
+        st.markdown('<div class="custom-button">', unsafe_allow_html=True)
+        button = st.button("OK")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+else:
+    col1, col2, col3 = st.columns([3, 0.4, 0.5])
+
+    with col1:
+        selected = st.text_input("Search For Memories", "")
+
+    with col2:
+        st.markdown('<div class="custom-button">', unsafe_allow_html=True)
+        button = st.button("OK")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with col3:
+        st.markdown('<div class="custom-button">', unsafe_allow_html=True)
+        button = st.button("Return")
+        st.markdown('</div>', unsafe_allow_html=True)
+        if button:
+            go_back()
+
 
 def filter_images(query, data):
     if query:
@@ -98,7 +112,7 @@ else:
                 st.image(filtered_images[i]["url"], caption=f"Taken on {filtered_images[i]['timestamp']}", use_column_width=True)
                 st.subheader("Description")
                 st.write(filtered_images[i]["short_description"])
-                if st.button(f"More details about {filtered_images[i]['url']}", key=f"button_{i}"):
+                if st.button(f"Show details", key=f"button_{i}"):
                     show_details(i)
 
             if i + 1 < len(filtered_images):
@@ -106,7 +120,7 @@ else:
                     st.image(filtered_images[i+1]["url"], caption=f"Taken on {filtered_images[i+1]['timestamp']}", use_column_width=True)
                     st.subheader("Description")
                     st.write(filtered_images[i+1]["short_description"])
-                    if st.button(f"More details about {filtered_images[i+1]['url']}", key=f"button_{i+1}"):
+                    if st.button(f"Show details", key=f"button_{i+1}"):
                         show_details(i+1)
 
     st.write("---")

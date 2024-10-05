@@ -1,12 +1,11 @@
 import streamlit as st
+import requests
+
+r = requests.get("https://f9c0-138-51-73-220.ngrok-free.app/api/summary").json()
 
 # Mock user data (would come from an API)
 user_name = "Alexander"
-summary_paragraphs = [
-    "Today, you had an early meeting with the marketing team where you discussed the new product launch strategy.",
-    "You then grabbed lunch with Sarah at your favorite cafe downtown.",
-    "In the afternoon, you met with your development team to finalize the app features and had a productive brainstorming session."
-]
+summary_paragraphs = [p for p in r["summary"].split("\n") if p.strip()]
 
 # Dashboard Page
 def dashboard():
