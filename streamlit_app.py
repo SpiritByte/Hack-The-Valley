@@ -19,11 +19,12 @@ logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
 dashboard = st.Page("app/dashboard.py", title="Dashboard", icon=":material/dashboard:", default=True)
 history = st.Page("app/history.py", title="History", icon=":material/history:")
 trace = st.Page("app/trace.py", title="Trace", icon=":material/map:")
+chatbot = st.Page("app/chatbot.py", title="Chatbot", icon=":material/robot:")
 
 if st.session_state.logged_in:
     pg = st.navigation(
         {
-            "Snaipshot": [dashboard, history, trace, logout_page],
+            "Snaipshot": [dashboard, history, trace, chatbot, logout_page],
         }
     )
 else:
