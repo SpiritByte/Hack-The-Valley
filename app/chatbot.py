@@ -6,7 +6,7 @@ import os
 load_dotenv()
 
 # Set your OpenAI API key
-api_key = os.getenv("openai_key")
+api_key = st.secrets["api_key"]
 api_url = "https://api.openai.com/v1/chat/completions"
 headers = {
     "Authorization": f"Bearer {api_key}",
