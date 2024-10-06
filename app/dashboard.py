@@ -145,7 +145,7 @@ highlight = requests.get("https://htv-project.onrender.com/api/highlight").json(
 highlight_paragraphs = [p for p in highlight.split("\n") if p.strip()]
 
 # Mock user data (would come from an API)
-user_name = "Alexander"
+user_name = "Baron"
 
 def autoplay_audio(file_path: str):
     """Plays audio on the UI from the file path provided."""
