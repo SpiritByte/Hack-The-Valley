@@ -187,7 +187,7 @@ def helpbtnCallback():
         combined_text = f"{time_str} {descp}"
 
         # Pass the combined text to the /api/text-to-speech API
-        url_tts = "https://htv-project.onrender.com/api/text-to-speech"
+        url_tts = "https://hack-the-valley-09.charlws.workers.dev/api/text-to-speech"
         data_tts = {
             "text": combined_text
         }
