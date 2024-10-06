@@ -17,7 +17,7 @@ def icon(icon_name):
 local_css("style.css")
 remote_css('https://fonts.googleapis.com/icon?family=Material+Icons')
 
-image_data = [{"url": x["file_url"], "short_description": x["caption"], "full_description": x["descp"], "timestamp": x["timestamp"], "location": {"latitude": float(x["locationx"]), "longitude": float(x["locationy"])}} for x in r]
+image_data = [{"url": x["file_url"], "short_description": x["caption"], "full_description": x["descp"], "timestamp": x["timestamp"], "location": {"latitude": float(x["locationx"]), "longitude": float(x["locationy"])}} for x in r if x["voice_note"] == "Yes"]
 
 if "selected_image_index" not in st.session_state:
     st.session_state.selected_image_index = None
@@ -45,7 +45,7 @@ if st.session_state.selected_image_index is None:
     col1, col2 = st.columns([3, 0.3])
 
     with col1:
-        search = st.text_input("Search for memories", "")
+        search = st.text_input("Search for alerts", "")
 
     with col2:
         st.markdown('<div class="custom-button">', unsafe_allow_html=True)
@@ -56,7 +56,7 @@ else:
     col1, col2, col3 = st.columns([3, 0.4, 0.5])
 
     with col1:
-        search = st.text_input("Search for memories", "")
+        search = st.text_input("Search for alerts", "")
 
     with col2:
         st.markdown('<div class="custom-button">', unsafe_allow_html=True)
@@ -105,22 +105,15 @@ else:
     if not filtered_images:
         st.write("No results found.")
     else:
-        for i in range(0, len(filtered_images), 2):
-            cols = st.columns(2) 
+        for i in range(0, len(filtered_images)):
+            cols = st.columns([3, 0.7]) 
 
             with cols[0]:
-                st.image(filtered_images[i]["url"], caption=f"Taken on {filtered_images[i]['timestamp']}", use_column_width=True)
-                st.subheader("Description")
-                st.write(filtered_images[i]["short_description"])
+                st.warning(filtered_images[i]["short_description"], icon="⚠️")
+
+            with cols[1]:
                 if st.button(f"Show details", key=f"button_{i}"):
                     show_details(i)
 
-            if i + 1 < len(filtered_images):
-                with cols[1]:
-                    st.image(filtered_images[i+1]["url"], caption=f"Taken on {filtered_images[i+1]['timestamp']}", use_column_width=True)
-                    st.subheader("Description")
-                    st.write(filtered_images[i+1]["short_description"])
-                    if st.button(f"Show details", key=f"button_{i+1}"):
-                        show_details(i+1)
 
     st.write("---")
